@@ -21,13 +21,14 @@ app.post("/sign-up", (request, response) => {
     console.log(usersList)
     }
   }); 
-    
 
     app.post("/tweets", (request, response) => {
         const { username, tweet } = request.body    
         const registred = usersList.some(user => user.username === username)
 
-        if (registred)
+        if(request.body.tweet===""){ return res.status(400).send("[ERRO] Você precisa preencher todos os campos")}
+
+        if(registred)
         {
             const newTweet = { username, tweet };
             tweets.push(newTweet);
