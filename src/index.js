@@ -22,17 +22,21 @@ app.post("/sign-up", (request, response) => {
     }
   }); 
 
+
   app.get("/tweets", (request, response) => {
 
-    const tweetsList = tweets.slice(-10).map((t) => {
+    const tweetList = tweets.slice(-10).map((t) => {
 
-        const avatar = usersList.some(u => u.username === t.avatar);
-        const newTweetList = { ...t, avatar}
+    const user = usersList.find((u) => u.username === t.username)
+    const newTweets = {...t,avatar: user.avatar} 
 
-        return newTweetList;
+    return newTweets;  
     })
-    response.send(tweetsList);
-});
+    response.send(tweetList)
+  })
+
+
+
 
 app.post("/tweets", (request, response) => {
     const { username, tweet } = request.body    
