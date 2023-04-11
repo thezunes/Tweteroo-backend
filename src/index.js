@@ -22,22 +22,39 @@ app.post("/sign-up", (request, response) => {
     }
   }); 
 
-    app.post("/tweets", (request, response) => {
-        const { username, tweet } = request.body    
-        const registred = usersList.some(user => user.username === username)
+  app.get("/tweets", (request, response) => {
 
-        if(request.body.tweet===""){ return res.status(400).send("[ERRO] Você precisa preencher todos os campos")}
+    const tweetsList = tweets.slice(-10).map((t) => {
 
-        if(registred)
-        {
-            const newTweet = { username, tweet };
-            tweets.push(newTweet);
-            console.log("success");
-            response.status(201).send("OK");
-        } else {
-            console.log("UNAUTHORIZED");
-            response.status(401).send("UNAUTHORIZED");
-        }
-    });
+        const avatar = usersList.some(u => u.username === t.avatar);
+        const newTweetList = { ...t, avatar}
+
+        return newTweetList;
+    })
+    response.send(tweetsList);
+});
+
+app.post("/tweets", (request, response) => {
+    const { username, tweet } = request.body    
+    const registred = usersList.some(user => user.username === username)
+    const newTweet = { username, tweet }
+    const tweetEmpty = request.body.tweet
+
+    if(tweetEmpty===""){ 
+    response.status(400).send("[ERRO] Você precisa preencher todos os campos")
+    console.log("[Erro] Você precisa preencher todos os campos")
+    return;
+    }
+
+    if(registred)
+    {
+        tweets.push(newTweet);
+        console.log("success");
+        response.status(201).send("OK");
+    } else {
+        console.log("UNAUTHORIZED");
+        response.status(401).send("UNAUTHORIZED");
+    }
+});
 
 app.listen(5000, () => console.log("servidor rodando na porta 5000"))
