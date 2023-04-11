@@ -36,8 +36,6 @@ app.post("/sign-up", (request, response) => {
   })
 
 
-
-
 app.post("/tweets", (request, response) => {
     const { username, tweet } = request.body    
     const registred = usersList.some(user => user.username === username)
